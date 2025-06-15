@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export const Hero = () => {
   return (
@@ -17,14 +18,18 @@ export const Hero = () => {
             Your digital gateway to smarter reading!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              <BookOpen className="w-5 h-5 mr-2" />
-              Browse eBooks
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-2">
-              Learn More
-            </Button>
+            <Link to="/store">
+              <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                <BookOpen className="w-5 h-5 mr-2" />
+                Browse eBooks
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
+            <Link to="/about">
+              <Button size="lg" variant="outline" className="border-2">
+                Learn More
+              </Button>
+            </Link>
           </div>
           <div className="relative">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-200 to-purple-200 blur-3xl opacity-30 rounded-full"></div>
