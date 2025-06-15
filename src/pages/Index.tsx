@@ -2,7 +2,10 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { DealsOfTheWeek } from "@/components/DealsOfTheWeek";
+import { FeaturedCategories } from "@/components/FeaturedCategories";
+import { BestSellers } from "@/components/BestSellers";
 import { PopularBooks } from "@/components/PopularBooks";
+import { MostDemanding } from "@/components/MostDemanding";
 import { StatsSection } from "@/components/StatsSection";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { BurgerComparison } from "@/components/BurgerComparison";
@@ -18,7 +21,10 @@ const Index = () => {
       <Header />
       <Hero />
       <DealsOfTheWeek />
+      <FeaturedCategories />
+      <BestSellers />
       <PopularBooks />
+      <MostDemanding />
       <StatsSection />
       <ComparisonTable />
       <BurgerComparison />
