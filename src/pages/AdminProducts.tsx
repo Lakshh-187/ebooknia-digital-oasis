@@ -20,6 +20,8 @@ interface Product {
   reviews: number;
   badge?: string;
   subtitle?: string;
+  section: "popular" | "bestseller" | "deals" | "demanding" | "store";
+  downloads?: string;
 }
 
 const AdminProducts = () => {
@@ -30,16 +32,130 @@ const AdminProducts = () => {
   const [isAddingProduct, setIsAddingProduct] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState<Partial<Product>>({});
+  const [selectedSection, setSelectedSection] = useState<string>("all");
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadProducts();
+      loadAllProducts();
     }
   }, [isAuthenticated]);
 
-  const loadProducts = () => {
+  const loadAllProducts = () => {
+    // Load products from localStorage (store products)
     const storedProducts = JSON.parse(localStorage.getItem('ebooknia-products') || '[]');
-    setProducts(storedProducts);
+    
+    // Default products for all sections if none exist
+    const defaultProducts: Product[] = [
+      // Popular Books
+      {
+        id: "pop-01",
+        title: "Beat the Stress",
+        subtitle: "Struggling with stress from exams or work?",
+        description: "Beat the Stress is your quick, practical guide to stay calm, focused, and in control. Perfect for students and entrepreneurs, it's packed with easy tools to manage pressure and boost productivity.",
+        image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&h=400&fit=crop",
+        price: 99,
+        originalPrice: 199,
+        category: "live",
+        rating: 4.8,
+        reviews: 125,
+        badge: "BESTSELLER",
+        section: "popular"
+      },
+      {
+        id: "pop-02",
+        title: "AI in Digital Marketing",
+        subtitle: "Want to grow faster with less effort?",
+        description: "AI in Digital Marketing reveals how smart tools can automate, optimize, and scale your business. Perfect for marketers and entrepreneurs, this guide shows real AI strategies that boost sales and save time.",
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=400&fit=crop",
+        price: 149,
+        originalPrice: 299,
+        category: "live",
+        rating: 4.9,
+        reviews: 82,
+        badge: "TRENDING",
+        section: "popular"
+      },
+      // Best Sellers
+      {
+        id: "best-01",
+        title: "Beat the Stress",
+        description: "Your complete stress management guide",
+        price: 99,
+        originalPrice: 199,
+        rating: 4.8,
+        downloads: "25K+",
+        image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=250&fit=crop",
+        category: "live",
+        reviews: 250,
+        section: "bestseller"
+      },
+      {
+        id: "best-02",
+        title: "AI for Productivity",
+        description: "Boost your productivity with AI",
+        price: 159,
+        originalPrice: 299,
+        rating: 4.9,
+        downloads: "18K+",
+        image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=200&h=250&fit=crop",
+        category: "live",
+        reviews: 180,
+        section: "bestseller"
+      },
+      // Deals of the Week
+      {
+        id: "deal-01",
+        title: "AI for Productivity",
+        description: "Limited time offer on AI productivity guide",
+        price: 99,
+        originalPrice: 199,
+        image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=200&fit=crop",
+        category: "live",
+        rating: 4.5,
+        reviews: 100,
+        badge: "Sale!",
+        section: "deals"
+      },
+      {
+        id: "deal-02",
+        title: "AI Profit Masterclass",
+        description: "Master AI for business profits",
+        price: 149,
+        originalPrice: 299,
+        image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=200&fit=crop",
+        category: "live",
+        rating: 4.6,
+        reviews: 85,
+        badge: "Sale!",
+        section: "deals"
+      },
+      // Most Demanding
+      {
+        id: "demand-01",
+        title: "AI Revolution 2024",
+        subtitle: "Master AI Tools for Business Growth",
+        description: "Complete guide to AI business transformation",
+        price: 199,
+        originalPrice: 399,
+        image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=300&h=200&fit=crop",
+        rating: 4.9,
+        reviews: 520,
+        badge: "HOT",
+        category: "live",
+        section: "demanding"
+      }
+    ];
+
+    // Combine stored products with defaults if none exist
+    let allProducts = storedProducts.length > 0 ? storedProducts : defaultProducts;
+    
+    // Ensure all products have a section
+    allProducts = allProducts.map(p => ({
+      ...p,
+      section: p.section || "store"
+    }));
+
+    setProducts(allProducts);
   };
 
   const saveProducts = (updatedProducts: Product[]) => {
@@ -70,7 +186,8 @@ const AdminProducts = () => {
       category: "live",
       rating: 4.5,
       reviews: 0,
-      badge: "NEW"
+      badge: "NEW",
+      section: "store"
     });
   };
 
@@ -80,17 +197,17 @@ const AdminProducts = () => {
   };
 
   const handleSaveProduct = () => {
-    if (!formData.title || !formData.description || !formData.price || !formData.image) {
+    if (!formData.title || !formData.description || !formData.price || !formData.image || !formData.section) {
       toast({
         title: "Error",
-        description: "Please fill in all required fields",
+        description: "Please fill in all required fields including section",
         variant: "destructive"
       });
       return;
     }
 
     const productData: Product = {
-      id: editingProduct?.id || Date.now().toString(),
+      id: editingProduct?.id || `${formData.section}-${Date.now()}`,
       title: formData.title!,
       description: formData.description!,
       subtitle: formData.subtitle || "",
@@ -100,7 +217,9 @@ const AdminProducts = () => {
       category: formData.category as "live" | "upcoming",
       rating: Number(formData.rating!) || 4.5,
       reviews: Number(formData.reviews!) || 0,
-      badge: formData.badge
+      badge: formData.badge,
+      section: formData.section as "popular" | "bestseller" | "deals" | "demanding" | "store",
+      downloads: formData.downloads
     };
 
     let updatedProducts;
@@ -139,6 +258,14 @@ const AdminProducts = () => {
     setFormData({});
   };
 
+  const filteredProducts = selectedSection === "all" 
+    ? products 
+    : products.filter(p => p.section === selectedSection);
+
+  const getProductCountBySection = (section: string) => {
+    return products.filter(p => p.section === section).length;
+  };
+
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
@@ -148,7 +275,7 @@ const AdminProducts = () => {
               <Shield className="w-8 h-8 text-blue-400" />
               <span>Product Management</span>
             </CardTitle>
-            <p className="text-gray-300">Enter the admin key to manage products</p>
+            <p className="text-gray-300">Enter the admin key to manage all website products</p>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
@@ -190,9 +317,9 @@ const AdminProducts = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Product Management
+                All Website Products Management
               </h1>
-              <p className="text-gray-600 mt-2">Manage your eBook products</p>
+              <p className="text-gray-600 mt-2">Manage products from all sections of your website</p>
             </div>
             <div className="flex space-x-4">
               <Button 
@@ -212,6 +339,34 @@ const AdminProducts = () => {
             </div>
           </div>
         </div>
+
+        {/* Section Filter */}
+        <Card className="mb-8 bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+          <CardHeader>
+            <CardTitle>Filter by Section</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {[
+                { key: "all", label: "All Products", count: products.length },
+                { key: "popular", label: "Popular Books", count: getProductCountBySection("popular") },
+                { key: "bestseller", label: "Best Sellers", count: getProductCountBySection("bestseller") },
+                { key: "deals", label: "Deals of Week", count: getProductCountBySection("deals") },
+                { key: "demanding", label: "Most Demanding", count: getProductCountBySection("demanding") },
+                { key: "store", label: "Store Products", count: getProductCountBySection("store") }
+              ].map(section => (
+                <Button
+                  key={section.key}
+                  variant={selectedSection === section.key ? "default" : "outline"}
+                  onClick={() => setSelectedSection(section.key)}
+                  className={selectedSection === section.key ? "bg-gradient-to-r from-blue-600 to-purple-600" : ""}
+                >
+                  {section.label} ({section.count})
+                </Button>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Add/Edit Product Form */}
         {(isAddingProduct || editingProduct) && (
@@ -263,6 +418,21 @@ const AdminProducts = () => {
                 </div>
 
                 <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium">Section *</label>
+                    <select
+                      className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md"
+                      value={formData.section || "store"}
+                      onChange={(e) => setFormData({...formData, section: e.target.value as any})}
+                    >
+                      <option value="popular">Popular Books</option>
+                      <option value="bestseller">Best Sellers</option>
+                      <option value="deals">Deals of Week</option>
+                      <option value="demanding">Most Demanding</option>
+                      <option value="store">Store Products</option>
+                    </select>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="text-sm font-medium">Price (₹) *</label>
@@ -320,19 +490,30 @@ const AdminProducts = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <label className="text-sm font-medium">Badge</label>
-                    <select
-                      className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md"
-                      value={formData.badge || ""}
-                      onChange={(e) => setFormData({...formData, badge: e.target.value})}
-                    >
-                      <option value="">No Badge</option>
-                      <option value="BESTSELLER">BESTSELLER</option>
-                      <option value="TRENDING">TRENDING</option>
-                      <option value="HOT">HOT</option>
-                      <option value="NEW">NEW</option>
-                    </select>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="text-sm font-medium">Badge</label>
+                      <select
+                        className="w-full h-10 px-3 py-2 border border-input bg-background rounded-md"
+                        value={formData.badge || ""}
+                        onChange={(e) => setFormData({...formData, badge: e.target.value})}
+                      >
+                        <option value="">No Badge</option>
+                        <option value="BESTSELLER">BESTSELLER</option>
+                        <option value="TRENDING">TRENDING</option>
+                        <option value="HOT">HOT</option>
+                        <option value="NEW">NEW</option>
+                        <option value="Sale!">Sale!</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="text-sm font-medium">Downloads (for Best Sellers)</label>
+                      <Input
+                        value={formData.downloads || ""}
+                        onChange={(e) => setFormData({...formData, downloads: e.target.value})}
+                        placeholder="25K+"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -354,13 +535,20 @@ const AdminProducts = () => {
         {/* Products Table */}
         <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
           <CardHeader>
-            <CardTitle>Products ({products.length})</CardTitle>
+            <CardTitle>
+              Products ({filteredProducts.length})
+              {selectedSection !== "all" && (
+                <span className="text-sm font-normal text-gray-600 ml-2">
+                  - {selectedSection.charAt(0).toUpperCase() + selectedSection.slice(1)} Section
+                </span>
+              )}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            {products.length === 0 ? (
+            {filteredProducts.length === 0 ? (
               <div className="text-center py-12">
                 <Plus className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500 text-lg">No products yet</p>
+                <p className="text-gray-500 text-lg">No products in this section</p>
                 <p className="text-gray-400">Add your first product to get started</p>
               </div>
             ) : (
@@ -370,6 +558,7 @@ const AdminProducts = () => {
                     <TableRow>
                       <TableHead>Image</TableHead>
                       <TableHead>Title</TableHead>
+                      <TableHead>Section</TableHead>
                       <TableHead>Price</TableHead>
                       <TableHead>Category</TableHead>
                       <TableHead>Rating</TableHead>
@@ -377,7 +566,7 @@ const AdminProducts = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {products.map((product) => (
+                    {filteredProducts.map((product) => (
                       <TableRow key={product.id}>
                         <TableCell>
                           <img 
@@ -395,6 +584,17 @@ const AdminProducts = () => {
                               </span>
                             )}
                           </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            product.section === 'popular' ? 'bg-purple-100 text-purple-800' :
+                            product.section === 'bestseller' ? 'bg-yellow-100 text-yellow-800' :
+                            product.section === 'deals' ? 'bg-red-100 text-red-800' :
+                            product.section === 'demanding' ? 'bg-orange-100 text-orange-800' :
+                            'bg-blue-100 text-blue-800'
+                          }`}>
+                            {product.section}
+                          </span>
                         </TableCell>
                         <TableCell>
                           <div>
@@ -419,6 +619,9 @@ const AdminProducts = () => {
                           <div className="text-sm">
                             <span>⭐ {product.rating}</span>
                             <span className="text-gray-500 ml-1">({product.reviews})</span>
+                            {product.downloads && (
+                              <div className="text-xs text-blue-600">{product.downloads}</div>
+                            )}
                           </div>
                         </TableCell>
                         <TableCell>
