@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,84 +16,102 @@ interface Product {
   category: "live" | "upcoming";
   rating: number;
   reviews: number;
+  badge?: string;
+  subtitle?: string;
 }
 
 interface CartItem extends Product {
   quantity: number;
 }
 
-const products: Product[] = [
-  {
-    id: "1",
-    title: "Beat the Stress",
-    description: "Your quick, practical guide to stay calm, focused, and in control. Perfect for students and entrepreneurs.",
-    price: 99,
-    originalPrice: 149,
-    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&h=400&fit=crop",
-    category: "live",
-    rating: 4.9,
-    reviews: 152
-  },
-  {
-    id: "2",
-    title: "AI in Digital Marketing",
-    description: "Reveals how smart tools can automate, optimize, and scale your business with real AI strategies.",
-    price: 149,
-    originalPrice: 199,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=400&fit=crop",
-    category: "live",
-    rating: 4.8,
-    reviews: 98
-  },
-  {
-    id: "3",
-    title: "Time Management for Entrepreneurs",
-    description: "Take back control of your schedule with smart techniques to boost focus and productivity.",
-    price: 129,
-    originalPrice: 179,
-    image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop",
-    category: "live",
-    rating: 4.7,
-    reviews: 203
-  },
-  {
-    id: "4",
-    title: "AI for Productivity",
-    description: "Use powerful AI tools to automate tasks, streamline work, and boost your daily output.",
-    price: 159,
-    originalPrice: 199,
-    image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=400&fit=crop",
-    category: "live",
-    rating: 4.9,
-    reviews: 87
-  },
-  {
-    id: "5",
-    title: "Leadership in Digital Age",
-    description: "Master modern leadership skills for the digital transformation era.",
-    price: 179,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop",
-    category: "upcoming",
-    rating: 0,
-    reviews: 0
-  },
-  {
-    id: "6",
-    title: "Crypto Investment Guide",
-    description: "Complete beginner's guide to cryptocurrency investment and blockchain technology.",
-    price: 199,
-    image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=300&h=400&fit=crop",
-    category: "upcoming",
-    rating: 0,
-    reviews: 0
-  }
-];
-
 const Store = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<"all" | "live" | "upcoming">("all");
+  const [products, setProducts] = useState<Product[]>([]);
   const { toast } = useToast();
+
+  useEffect(() => {
+    // Load products from localStorage
+    const storedProducts = JSON.parse(localStorage.getItem('ebooknia-products') || '[]');
+    
+    // If no products in localStorage, use default products
+    if (storedProducts.length === 0) {
+      const defaultProducts: Product[] = [
+        {
+          id: "1",
+          title: "Beat the Stress",
+          description: "Your quick, practical guide to stay calm, focused, and in control. Perfect for students and entrepreneurs.",
+          price: 99,
+          originalPrice: 149,
+          image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=300&h=400&fit=crop",
+          category: "live",
+          rating: 4.9,
+          reviews: 152,
+          badge: "BESTSELLER"
+        },
+        {
+          id: "2",
+          title: "AI in Digital Marketing",
+          description: "Reveals how smart tools can automate, optimize, and scale your business with real AI strategies.",
+          price: 149,
+          originalPrice: 199,
+          image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=300&h=400&fit=crop",
+          category: "live",
+          rating: 4.8,
+          reviews: 98,
+          badge: "TRENDING"
+        },
+        {
+          id: "3",
+          title: "Time Management for Entrepreneurs",
+          description: "Take back control of your schedule with smart techniques to boost focus and productivity.",
+          price: 129,
+          originalPrice: 179,
+          image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=300&h=400&fit=crop",
+          category: "live",
+          rating: 4.7,
+          reviews: 203,
+          badge: "HOT"
+        },
+        {
+          id: "4",
+          title: "AI for Productivity",
+          description: "Use powerful AI tools to automate tasks, streamline work, and boost your daily output.",
+          price: 159,
+          originalPrice: 199,
+          image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=300&h=400&fit=crop",
+          category: "live",
+          rating: 4.9,
+          reviews: 87,
+          badge: "NEW"
+        },
+        {
+          id: "5",
+          title: "Leadership in Digital Age",
+          description: "Master modern leadership skills for the digital transformation era.",
+          price: 179,
+          image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=400&fit=crop",
+          category: "upcoming",
+          rating: 0,
+          reviews: 0
+        },
+        {
+          id: "6",
+          title: "Crypto Investment Guide",
+          description: "Complete beginner's guide to cryptocurrency investment and blockchain technology.",
+          price: 199,
+          image: "https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=300&h=400&fit=crop",
+          category: "upcoming",
+          rating: 0,
+          reviews: 0
+        }
+      ];
+      setProducts(defaultProducts);
+    } else {
+      setProducts(storedProducts);
+    }
+  }, []);
 
   const addToCart = (product: Product) => {
     setCart(prev => {
@@ -156,7 +173,6 @@ const Store = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       <Header />
       
-      {/* Cart Sidebar */}
       {isCartOpen && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50" onClick={() => setIsCartOpen(false)}>
           <div className="absolute right-0 top-0 h-full w-96 bg-white shadow-xl" onClick={e => e.stopPropagation()}>
@@ -227,14 +243,12 @@ const Store = () => {
 
       <main className="py-20 px-4">
         <div className="container mx-auto">
-          {/* Header Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4">
               Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">eBook Store</span>
             </h1>
             <p className="text-xl text-gray-600 mb-8">Discover premium eBooks for entrepreneurs and students</p>
             
-            {/* Cart Button */}
             <div className="flex justify-center mb-8">
               <Button 
                 onClick={() => setIsCartOpen(true)}
@@ -251,7 +265,6 @@ const Store = () => {
             </div>
           </div>
 
-          {/* Category Filter */}
           <div className="flex justify-center mb-8">
             <div className="bg-white rounded-full p-1 shadow-lg">
               {["all", "live", "upcoming"].map(category => (
@@ -271,7 +284,6 @@ const Store = () => {
             </div>
           </div>
 
-          {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProducts.map(product => (
               <Card key={product.id} className="group hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-white/80 backdrop-blur-sm border-0 shadow-lg">
@@ -291,6 +303,17 @@ const Store = () => {
                         {product.category === "live" ? "Live" : "Coming Soon"}
                       </span>
                     </div>
+                    {product.badge && (
+                      <div className="absolute top-2 left-2">
+                        <span className={`px-2 py-1 text-xs font-bold rounded-full text-white ${
+                          product.badge === 'BESTSELLER' ? 'bg-orange-500' :
+                          product.badge === 'TRENDING' ? 'bg-red-500' :
+                          product.badge === 'HOT' ? 'bg-pink-500' : 'bg-green-500'
+                        }`}>
+                          {product.badge}
+                        </span>
+                      </div>
+                    )}
                   </div>
                   
                   <h3 className="text-xl font-bold mb-2 group-hover:text-blue-600 transition-colors">
