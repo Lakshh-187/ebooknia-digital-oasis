@@ -14,6 +14,7 @@ import { FAQ } from "@/components/FAQ";
 import { AboutSection } from "@/components/AboutSection";
 import { Footer } from "@/components/Footer";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { WhatsAppPopup } from "@/components/WhatsAppPopup";
 
 const Index = () => {
   return (
@@ -33,6 +34,7 @@ const Index = () => {
       <AboutSection />
       <Footer />
       <WhatsAppButton />
+      <WhatsAppPopup />
     </div>
   );
 };

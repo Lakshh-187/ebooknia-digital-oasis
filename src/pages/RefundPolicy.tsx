@@ -2,7 +2,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { Shield, AlertTriangle, Phone, Mail } from "lucide-react";
 
 const RefundPolicy = () => {
   return (
@@ -16,161 +16,110 @@ const RefundPolicy = () => {
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Refund Policy</span>
             </h1>
             <p className="text-xl text-gray-600">
-              We stand behind our products with a customer-friendly refund policy
+              Important information about our refund terms
             </p>
           </div>
 
           <div className="space-y-8">
-            {/* 30-Day Guarantee */}
-            <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-0 shadow-xl">
+            {/* No Refund Policy */}
+            <Card className="bg-gradient-to-r from-red-50 to-orange-50 border-0 shadow-xl border-l-4 border-l-red-500">
               <CardHeader>
-                <CardTitle className="flex items-center space-x-3 text-2xl">
-                  <Shield className="w-8 h-8 text-green-600" />
-                  <span>30-Day Money-Back Guarantee</span>
+                <CardTitle className="flex items-center space-x-3 text-2xl text-red-700">
+                  <AlertTriangle className="w-8 h-8 text-red-600" />
+                  <span>No Refund Policy</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-lg text-gray-700 leading-relaxed">
-                  We offer a full 30-day money-back guarantee on all our eBooks. If you're not completely 
-                  satisfied with your purchase, you can request a full refund within 30 days of purchase 
-                  with no questions asked.
+                <p className="text-lg text-gray-700 leading-relaxed font-semibold">
+                  Please note that EBOOKNiA operates under a strict NO REFUND policy. 
+                  All sales are final and no refunds will be provided for any kind of payment 
+                  once the purchase is completed.
                 </p>
-              </CardContent>
-            </Card>
-
-            {/* Refund Process */}
-            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-3 text-2xl">
-                  <Clock className="w-8 h-8 text-blue-600" />
-                  <span>How to Request a Refund</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-600 mt-1" />
-                    <div>
-                      <h3 className="font-semibold text-lg">Step 1: Contact Us</h3>
-                      <p className="text-gray-600">
-                        Send an email to <span className="font-semibold text-blue-600">ebooknia7@gmail.com</span> or 
-                        WhatsApp us at <span className="font-semibold text-blue-600">+919176994066</span> with your 
-                        order details and reason for refund.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-600 mt-1" />
-                    <div>
-                      <h3 className="font-semibold text-lg">Step 2: Order Verification</h3>
-                      <p className="text-gray-600">
-                        We'll verify your purchase details and confirm your refund request within 24 hours.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3">
-                    <CheckCircle className="w-6 h-6 text-green-600 mt-1" />
-                    <div>
-                      <h3 className="font-semibold text-lg">Step 3: Refund Processing</h3>
-                      <p className="text-gray-600">
-                        Once approved, your refund will be processed within 3-5 business days to your original payment method.
-                      </p>
-                    </div>
-                  </div>
+                <div className="mt-4 p-4 bg-red-100 rounded-lg">
+                  <p className="text-red-800 font-medium">
+                    By making a purchase, you acknowledge and agree to this no-refund policy.
+                  </p>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Refund Conditions */}
+            {/* Why No Refunds */}
             <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-3 text-2xl">
-                  <AlertCircle className="w-8 h-8 text-orange-600" />
-                  <span>Refund Conditions</span>
+                  <Shield className="w-8 h-8 text-blue-600" />
+                  <span>Why We Have This Policy</span>
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Eligible for Refund:</h3>
-                    <ul className="space-y-2 text-gray-600">
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <span>Request made within 30 days of purchase</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <span>Original purchaser requesting refund</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <CheckCircle className="w-5 h-5 text-green-600" />
-                        <span>Valid purchase confirmation available</span>
-                      </li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Not Eligible for Refund:</h3>
-                    <ul className="space-y-2 text-gray-600">
-                      <li className="flex items-center space-x-2">
-                        <AlertCircle className="w-5 h-5 text-red-600" />
-                        <span>Requests made after 30 days</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <AlertCircle className="w-5 h-5 text-red-600" />
-                        <span>Fraudulent or disputed charges</span>
-                      </li>
-                      <li className="flex items-center space-x-2">
-                        <AlertCircle className="w-5 h-5 text-red-600" />
-                        <span>Violation of our terms of service</span>
-                      </li>
+                  <p className="text-gray-700 leading-relaxed">
+                    Our digital products are instantly accessible upon purchase. Due to the nature of 
+                    digital content and to protect our intellectual property, we maintain a strict 
+                    no-refund policy.
+                  </p>
+                  <ul className="space-y-2 text-gray-600">
+                    <li className="flex items-start space-x-2">
+                      <span className="w-2 h-2 bg-blue-600 rounded-full mt-2"></span>
+                      <span>Digital products are delivered immediately</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <span className="w-2 h-2 bg-blue-600 rounded-full mt-2"></span>
+                      <span>Content cannot be "returned" once accessed</span>
+                    </li>
+                    <li className="flex items-start space-x-2">
+                      <span className="w-2 h-2 bg-blue-600 rounded-full mt-2"></span>
+                      <span>Protects against unauthorized distribution</span>
+                    </li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Before You Purchase */}
+            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
+              <CardHeader>
+                <CardTitle className="text-2xl">Before You Purchase</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <p className="text-gray-700 leading-relaxed">
+                    We encourage you to carefully review all product descriptions, previews, 
+                    and sample content before making your purchase decision.
+                  </p>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg mb-2">What You Should Do:</h3>
+                    <ul className="space-y-1 text-gray-600">
+                      <li>• Read the complete product description</li>
+                      <li>• Check the table of contents</li>
+                      <li>• Review sample pages if available</li>
+                      <li>• Contact us if you have questions</li>
                     </ul>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Special Cases */}
-            <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle className="text-2xl">Special Circumstances</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Technical Issues</h3>
-                    <p className="text-gray-600">
-                      If you experience technical difficulties accessing your eBook, we'll work with you 
-                      to resolve the issue. If we cannot resolve it within 48 hours, you're eligible 
-                      for a full refund regardless of the 30-day limit.
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2">Partial Refunds</h3>
-                    <p className="text-gray-600">
-                      In some special cases, we may offer partial refunds at our discretion. 
-                      Each case is evaluated individually based on the specific circumstances.
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Contact Information */}
+            {/* Support Information */}
             <Card className="bg-gradient-to-r from-blue-600 to-purple-600 text-white border-0 shadow-xl">
               <CardContent className="p-8 text-center">
-                <h3 className="text-2xl font-bold mb-4">Need Help?</h3>
-                <p className="text-xl mb-4">
-                  Our customer support team is here to help you with any refund-related questions.
+                <h3 className="text-2xl font-bold mb-4">Need Help Before Purchasing?</h3>
+                <p className="text-xl mb-6">
+                  Our team is here to answer any questions about our products before you buy.
                 </p>
-                <div className="space-y-2">
-                  <p><strong>Email:</strong> ebooknia7@gmail.com</p>
-                  <p><strong>WhatsApp:</strong> +919176994066</p>
-                  <p><strong>Response Time:</strong> Within 24 hours</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex items-center justify-center space-x-2">
+                    <Mail className="w-5 h-5" />
+                    <span><strong>Email:</strong> ebooknia7@gmail.com</span>
+                  </div>
+                  <div className="flex items-center justify-center space-x-2">
+                    <Phone className="w-5 h-5" />
+                    <span><strong>WhatsApp:</strong> +919176994066</span>
+                  </div>
                 </div>
+                <p className="mt-4 text-sm opacity-90">
+                  Response Time: Within 24 hours
+                </p>
               </CardContent>
             </Card>
           </div>
